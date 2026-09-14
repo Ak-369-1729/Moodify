@@ -3,55 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moodify by NexaSoul — Living Musical Instrument & Identity Engine</title>
-    <meta name="description" content="An original interactive music identity generator by NexaSoul. Featuring the Living Digital Harmonium interface: transform sound, anthem, and mood into an iconic visual artifact.">
-    <meta name="theme-color" content="#06080d">
-
-    <!-- High-Impact Google Fonts: Outfit (Display Headline), Plus Jakarta Sans (Clean UI), JetBrains Mono (Telemetry) -->
+    <title>Moodify by NexaSoul — The Living Digital Harmonium</title>
+    
+    <!-- Meta & SEO Calibration -->
+    <meta name="description" content="Moodify by NexaSoul: An art-directed digital instrument transforming human emotion, listening habits, and acoustic resonance into bespoke visual identity.">
+    <meta name="keywords" content="Moodify, NexaSoul, Digital Harmonium, Generative Art, Web Audio API, PixelCraft CSS, Sound to Identity">
+    <meta name="theme-color" content="#07080b">
+    
+    <!-- Fonts: Premium Modern Editorial & Mono Display Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700;800&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body data-mood="default">
-
-    <!-- Interactive Cursor Glow Spotlight (Subtle Ambient Following) -->
-    <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
-
-    <!-- Custom Morphing Harmonium Bellows Cursor (Only active over the instrument) -->
-    <div class="harmonium-cursor" id="harmoniumCursor" aria-hidden="true">
-        <div class="cursor-pump-symbol">
-            <span class="pump-pleat"></span>
-            <span class="pump-pleat"></span>
-            <span class="pump-pleat"></span>
-            <span class="pump-handle-bar"></span>
-            <span class="pump-center-pip"></span>
-        </div>
-        <span class="cursor-text-pill" id="cursorPillText">PUMP / PLAY</span>
-    </div>
-
-    <!-- Controlled Atmospheric Background (Calm Behind Text, Dynamic on Right) -->
-    <div class="bg-atmosphere" aria-hidden="true">
-        <div class="ambient-scrim-left"></div>
-        <div class="ambient-orb orb-right-engine" id="engineAura"></div>
-        <div class="ambient-orb orb-bottom-glow"></div>
-        <div class="subtle-cyber-grid"></div>
-    </div>
-
-    <!-- Constellation Canvas (Extremely subtle, 0 text interference) -->
-    <canvas id="particleCanvas" aria-hidden="true"></canvas>
-
-    <!-- Celebration Fireworks Confetti Canvas -->
-    <canvas id="confettiCanvas" aria-hidden="true"></canvas>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+<body>
 
     <!-- ===== NAVBAR ===== -->
     <header class="navbar" id="navbar">
         <div class="nav-container">
-            <!-- Authentic NexaSoul Brand Placement (No Box, No Tiny Badge) -->
+            <!-- Authentic NexaSoul Brand Placement -->
             <a href="#home" class="brand-unit" aria-label="Moodify by NexaSoul">
                 <img src="nexasoul-logo-alpha.png" alt="NexaSoul" class="nexasoul-logo-asset" onerror="this.onerror=null;this.src='nexasoul-logo-core.jpg';">
                 <div class="brand-divider-slash" aria-hidden="true">/</div>
@@ -66,7 +38,7 @@
                 <a href="#features" class="nav-item">Architecture</a>
                 <a href="#how-it-works" class="nav-item">Journey</a>
                 <a href="#formSection" class="nav-item">Identity Engine</a>
-                <button class="btn nav-cta-btn" onclick="scrollToForm()">
+                <button type="button" class="btn nav-cta-btn" onclick="scrollToForm()">
                     <span>Create Card</span>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                 </button>
@@ -94,52 +66,52 @@
                         <span class="eyebrow-pulse-dot"></span>
                         <span class="eyebrow-brand">NEXASOUL CREATIVE LAB</span>
                         <span class="eyebrow-sep">//</span>
-                        <span class="eyebrow-sub">LIVING HARMONIC ENGINE</span>
+                        <span class="eyebrow-sub">MOODIFY</span>
                     </div>
 
                     <!-- Dominant, Massive Headline with Intentional Contrast -->
                     <h1 class="hero-headline">
                         <span class="hl-line">YOUR MUSIC</span>
-                        <span class="hl-line contrast-accent">HAS A</span>
+                        <span class="hl-line">HAS A</span>
                         <span class="hl-line gradient-callout">VISUAL</span>
                         <span class="hl-line">IDENTITY.</span>
                     </h1>
 
                     <p class="hero-manifesto-text">
-                        Every track on loop leaves an emotional frequency. Moodify unites the soul of traditional acoustic expression with digital neural synthesis — translating your top artists, anthem, and mood into an iconic visual artifact.
+                        An organic digital instrument engineered by NexaSoul. Touch the reeds, compress the bellows, and translate raw acoustic resonance into bespoke visual identity.
                     </p>
 
                     <div class="hero-action-cluster">
-                        <button class="btn hero-primary-cta pulse-glow" onclick="scrollToForm()">
+                        <button type="button" class="btn hero-primary-cta pulse-glow" onclick="scrollToForm()">
                             <span>CREATE MY IDENTITY</span>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                         </button>
-                        <button class="btn hero-secondary-cta" onclick="scrollToHow()">
-                            <span>Explore The Pipeline</span>
+                        <button type="button" class="btn hero-secondary-cta" onclick="scrollToHow()">
+                            <span>Explore The Engine</span>
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg>
                         </button>
                     </div>
 
-                    <!-- Clear Product Journey Indicator (No Fake Stats!) -->
+                    <!-- Clear Product Journey Indicator -->
                     <div class="journey-indicator-bar" aria-label="Identity generation journey">
                         <div class="j-step">
                             <span class="j-step-num">01</span>
                             <span class="j-step-label">SOUND</span>
                         </div>
-                        <span class="j-arrow">→</span>
+                        <span class="j-arrow" aria-hidden="true">→</span>
                         <div class="j-step">
                             <span class="j-step-num">02</span>
                             <span class="j-step-label">ANTHEM</span>
                         </div>
-                        <span class="j-arrow">→</span>
+                        <span class="j-arrow" aria-hidden="true">→</span>
                         <div class="j-step">
                             <span class="j-step-num">03</span>
                             <span class="j-step-label">MOOD</span>
                         </div>
-                        <span class="j-arrow">→</span>
+                        <span class="j-arrow" aria-hidden="true">→</span>
                         <div class="j-step highlight-step">
                             <span class="j-step-num">04</span>
-                            <span class="j-step-label">IDENTITY CARD</span>
+                            <span class="j-step-label">IDENTITY</span>
                         </div>
                     </div>
                 </div>
@@ -147,27 +119,32 @@
                 <!-- RIGHT ZONE (~50%): THE LIVING DIGITAL HARMONIUM (SIGNATURE VISUAL OBJECT) -->
                 <div class="hero-right-column">
                     <div class="digital-harmonium-system" id="harmoniumSystem">
-                        <!-- Atmospheric Instrument Halo -->
+                        <!-- Atmospheric Instrument Halo (Layer 1) -->
                         <div class="harmonium-ambient-aura" id="harmoniumAura"></div>
 
-                        <!-- Contextual Engineering Annotations (Minimal, Art-Directed) -->
-                        <div class="instrument-tag tag-pressure" id="tagPressure">
-                            <span class="tag-pip lime"></span>
-                            <span>BELLOWS // <strong id="pressureVal">IDLE 25%</strong></span>
+                        <!-- Ground Perspective Shadow (Layer 2) -->
+                        <div class="harmonium-floor-shadow" aria-hidden="true"></div>
+
+                        <!-- Contextual Annotations (Subtle, Art-Directed) -->
+                        <div class="subtle-annotation annotation-input" id="tagPressure">
+                            <span class="annotation-dot cyan"></span>
+                            <span class="annotation-label">SONIC INPUT // <strong id="pressureVal">BELLOWS 25%</strong></span>
                         </div>
-                        <div class="instrument-tag tag-resonance">
-                            <span class="tag-pip cyan"></span>
-                            <span>RESONANCE // 48.0 kHz 24-BIT</span>
+                        
+                        <div class="subtle-annotation annotation-engine" id="tagMoodAura">
+                            <span class="annotation-dot violet"></span>
+                            <span class="annotation-label">MOOD ENGINE // <strong id="harmoniumMoodTag">SYNTHWAVE</strong></span>
                         </div>
-                        <div class="instrument-tag tag-engine" id="tagMoodAura">
-                            <span class="tag-pip violet"></span>
-                            <span>MOOD AURA // <strong id="harmoniumMoodTag">SYNTHWAVE</strong></span>
+
+                        <div class="subtle-annotation annotation-output">
+                            <span class="annotation-dot lime"></span>
+                            <span class="annotation-label">VISUAL OUTPUT // 2X RETINA</span>
                         </div>
 
                         <!-- Interactive Discovery Hint (Disappears on first interaction) -->
                         <div class="harmonium-discovery-hint" id="harmoniumHint">
                             <span class="hint-icon">✦</span>
-                            <span class="hint-text">Touch the sound · Drag bellows or play keys</span>
+                            <span class="hint-text">Touch the sound.</span>
                         </div>
 
                         <!-- Web Audio API Progressive Enhancement Toggle (Silent By Default) -->
@@ -179,7 +156,7 @@
                         <!-- The 3D Instrument Stage -->
                         <div class="harmonium-stage" id="harmoniumStage">
                             
-                            <!-- Interactive Bellows Unit (Left/Rear Accordion Multi-Fold Assembly) -->
+                            <!-- Interactive Bellows Unit (Multi-Fold Assembly) (Layer 4) -->
                             <div class="harmonium-bellows-assembly" id="harmoniumBellows" role="slider" aria-label="Harmonium Bellows Air Pump" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25">
                                 <div class="bellows-housing">
                                     <div class="bellows-pleats-stack" id="bellowsPleats">
@@ -193,7 +170,7 @@
                                     <!-- Mechanical Pump Handle (Draggable) -->
                                     <div class="bellows-handle" id="bellowsHandle">
                                         <div class="handle-grip"></div>
-                                        <span class="handle-label">PUMP AIR</span>
+                                        <span class="handle-label">PUMP</span>
                                     </div>
                                 </div>
                                 <div class="bellows-exhaust-ports">
@@ -201,13 +178,13 @@
                                 </div>
                             </div>
 
-                            <!-- Main Harmonium Chassis (Obsidian Wood & Brushed Titanium) -->
+                            <!-- Main Harmonium Chassis (Layer 3: Solid Wood Body) -->
                             <div class="harmonium-body">
-                                <!-- Top Bezel with NexaSoul Laser Accent -->
+                                <!-- Top Bezel with NexaSoul Branding -->
                                 <div class="harmonium-top-fascia">
                                     <div class="fascia-brand">
                                         <span class="fascia-laser-dot"></span>
-                                        <span class="fascia-text">NEXASOUL HARMONIC SYNTHESIZER</span>
+                                        <span class="fascia-text">NEXASOUL HARMONIC ENGINE</span>
                                     </div>
                                     <div class="fascia-meters">
                                         <span class="meter-pip active" id="liveMeter1"></span>
@@ -216,7 +193,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Integrated Resonator Display (Real-Time Harmonic Waveform) -->
+                                <!-- Integrated Resonator Screen (Layer 8: Sound Visualization) -->
                                 <div class="harmonium-resonator-screen">
                                     <canvas id="harmoniumWaveCanvas" width="460" height="84" aria-label="Harmonic Frequency Waveform"></canvas>
                                     <div class="resonator-glow-overlay"></div>
@@ -226,9 +203,9 @@
                                     </div>
                                 </div>
 
-                                <!-- Precision Keybed: 10 Stylized Interactive Keys -->
+                                <!-- Precision Keybed: 10 Stylized Interactive Keys (Layers 5 & 6) -->
                                 <div class="harmonium-keybed" id="harmoniumKeybed" role="toolbar" aria-label="Harmonium Visual Keyboard">
-                                    <!-- Key 1: Sa / 432Hz -->
+                                    <!-- Key 1: Sa / 261.6Hz -->
                                     <button type="button" class="h-key key-natural" data-note="Sa" data-freq="261.6" data-label="432Hz" data-key="1" aria-label="Key Sa 432Hz">
                                         <span class="key-surface"></span>
                                         <span class="key-label">Sa</span>
@@ -238,7 +215,7 @@
                                     <button type="button" class="h-key key-accidental" data-note="re" data-freq="277.2" data-label="re" data-key="2" aria-label="Key re 277Hz">
                                         <span class="key-surface"></span>
                                     </button>
-                                    <!-- Key 3: Re / 528Hz -->
+                                    <!-- Key 3: Re / 293.7Hz -->
                                     <button type="button" class="h-key key-natural" data-note="Re" data-freq="293.7" data-label="528Hz" data-key="3" aria-label="Key Re 528Hz">
                                         <span class="key-surface"></span>
                                         <span class="key-label">Re</span>
@@ -248,13 +225,13 @@
                                     <button type="button" class="h-key key-accidental" data-note="ga" data-freq="311.1" data-label="ga" data-key="4" aria-label="Key ga 311Hz">
                                         <span class="key-surface"></span>
                                     </button>
-                                    <!-- Key 5: Ga / 639Hz -->
+                                    <!-- Key 5: Ga / 329.6Hz -->
                                     <button type="button" class="h-key key-natural" data-note="Ga" data-freq="329.6" data-label="639Hz" data-key="5" aria-label="Key Ga 639Hz">
                                         <span class="key-surface"></span>
                                         <span class="key-label">Ga</span>
                                         <span class="key-freq">639Hz</span>
                                     </button>
-                                    <!-- Key 6: Ma / 741Hz -->
+                                    <!-- Key 6: Ma / 349.2Hz -->
                                     <button type="button" class="h-key key-natural" data-note="Ma" data-freq="349.2" data-label="741Hz" data-key="6" aria-label="Key Ma 741Hz">
                                         <span class="key-surface"></span>
                                         <span class="key-label">Ma</span>
@@ -264,7 +241,7 @@
                                     <button type="button" class="h-key key-accidental" data-note="ma" data-freq="370.0" data-label="ma" data-key="7" aria-label="Key ma 370Hz">
                                         <span class="key-surface"></span>
                                     </button>
-                                    <!-- Key 8: Pa / 852Hz -->
+                                    <!-- Key 8: Pa / 392.0Hz -->
                                     <button type="button" class="h-key key-natural" data-note="Pa" data-freq="392.0" data-label="852Hz" data-key="8" aria-label="Key Pa 852Hz">
                                         <span class="key-surface"></span>
                                         <span class="key-label">Pa</span>
@@ -274,7 +251,7 @@
                                     <button type="button" class="h-key key-accidental" data-note="dha" data-freq="415.3" data-label="dha" data-key="9" aria-label="Key dha 415Hz">
                                         <span class="key-surface"></span>
                                     </button>
-                                    <!-- Key 10: Dha / 963Hz -->
+                                    <!-- Key 10: Dha / 440.0Hz -->
                                     <button type="button" class="h-key key-natural" data-note="Dha" data-freq="440.0" data-label="963Hz" data-key="10" aria-label="Key Dha 963Hz">
                                         <span class="key-surface"></span>
                                         <span class="key-label">Dha</span>
@@ -296,117 +273,106 @@
             </div>
         </section>
 
-        <!-- ===== FEATURES SECTION (CONNECTING INSTRUMENT TO VISUAL IDENTITY) ===== -->
-        <section class="features-mosaic-section" id="features">
+        <!-- ===== 02 ARCHITECTURE SECTION (VISUAL PIPELINE DIAGRAM) ===== -->
+        <section class="architecture-section" id="features">
             <div class="section-heading-block">
-                <span class="section-kicker">ENGINE ARCHITECTURE</span>
-                <h2 class="section-big-title">Turn Your Taste Into a Visual Language.</h2>
-                <p class="section-big-subtitle">Every frequency, stroke, and harmonic rhythm translates systematically into mathematical vectors, mood palettes, and gallery-grade typography.</p>
+                <span class="section-kicker">02 // ARCHITECTURE</span>
+                <h2 class="section-big-title">Sound Transformed Into Visual DNA.</h2>
+                <p class="section-big-subtitle">A mathematical translation pipeline mapping acoustic frequencies to emotional geometry and gallery-grade visual identity.</p>
             </div>
 
-            <!-- Asymmetric Editorial Grid -->
-            <div class="mosaic-grid">
-                <!-- Primary Anchor Feature (Spans 8 Columns) -->
-                <div class="mosaic-card card-primary-highlight">
-                    <div class="mosaic-card-glow"></div>
-                    <div class="card-meta-header">
-                        <span class="meta-tag-pill">VISUAL IDENTITY</span>
-                        <span class="meta-spec-id">CORE-01</span>
-                    </div>
-                    <h3>Your Artists Become Visual Texture</h3>
-                    <p>Unlike disposable social graphics, Moodify renders an ultra-crisp, high-density 900x1300 physical canvas poster calibrated for Instagram stories, high-res downloads, and physical print exhibition.</p>
-                    
-                    <div class="card-demo-preview">
-                        <div class="demo-card-frame">
-                            <div class="demo-card-top">
-                                <span class="demo-brand-txt">NEXASOUL</span>
-                                <span class="demo-status-pill">VERIFIED IDENTITY</span>
-                            </div>
-                            <div class="demo-soundwave-ribbon">
-                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                            </div>
-                            <div class="demo-card-bottom">
-                                <span class="demo-serial">#NS-8842-IDENTITY // 48kHz</span>
-                                <span class="demo-year">2026</span>
-                            </div>
+            <!-- Visual Pipeline Flow Diagram -->
+            <div class="pipeline-diagram-wrapper">
+                <div class="pipeline-grid">
+                    <!-- Node 1: SOUND -->
+                    <div class="pipeline-card" data-step="1">
+                        <div class="pipeline-card-glow"></div>
+                        <div class="p-card-top">
+                            <span class="p-step-badge">STAGE 01</span>
+                            <span class="p-type-tag">INPUT</span>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Feature 2: 8 Mood Universes -->
-                <div class="mosaic-card">
-                    <div class="card-meta-header">
-                        <span class="meta-tag-pill">MOOD ENGINE</span>
-                        <span class="meta-spec-id">CORE-02</span>
-                    </div>
-                    <div class="card-feature-icon">🎭</div>
-                    <h3>Your Mood Controls The Atmosphere</h3>
-                    <p>From the crushing depths of Gothic Grunge to the celestial calm of Peaceful Classical, each mood commands an original chromatic gradient mesh.</p>
-                    <div class="swatches-palette-row">
-                        <span class="swatch-item gothic" title="Gothic Grunge"></span>
-                        <span class="swatch-item lofi" title="Cozy Lo-Fi"></span>
-                        <span class="swatch-item energy" title="Electric Energy"></span>
-                        <span class="swatch-item synth" title="Dreamy Synthwave"></span>
-                        <span class="swatch-item rnb" title="Chill R&B"></span>
-                        <span class="swatch-item folk" title="Indie Folk"></span>
-                        <span class="swatch-item hiphop" title="Hype Hip-Hop"></span>
-                        <span class="swatch-item classical" title="Peaceful Classical"></span>
-                    </div>
-                </div>
-
-                <!-- Feature 3: Dynamic Vibe Spectrum -->
-                <div class="mosaic-card">
-                    <div class="card-meta-header">
-                        <span class="meta-tag-pill">HARMONIC METRICS</span>
-                        <span class="meta-spec-id">CORE-03</span>
-                    </div>
-                    <div class="card-feature-icon">📊</div>
-                    <h3>Multi-Axis Vibe Radar</h3>
-                    <p>Algorithmic calculation of chill resonance, groove coefficient, electrical voltage, and atmospheric depth.</p>
-                    <div class="radar-mini-stack">
-                        <div class="radar-row"><span>Chill</span><div class="r-track"><div class="r-fill" style="width: 85%"></div></div><span class="r-num">85%</span></div>
-                        <div class="radar-row"><span>Voltage</span><div class="r-track"><div class="r-fill" style="width: 92%"></div></div><span class="r-num">92%</span></div>
-                        <div class="radar-row"><span>Depth</span><div class="r-track"><div class="r-fill" style="width: 78%"></div></div><span class="r-num">78%</span></div>
-                    </div>
-                </div>
-
-                <!-- Feature 4: Featured Anthem Spotlight -->
-                <div class="mosaic-card">
-                    <div class="card-meta-header">
-                        <span class="meta-tag-pill">TRACK SPOTLIGHT</span>
-                        <span class="meta-spec-id">CORE-04</span>
-                    </div>
-                    <div class="card-feature-icon">💿</div>
-                    <h3>Your Anthem Anchors The Staging</h3>
-                    <p>Elevate your singular loop obsession with authentic vinyl groove textures and high-contrast typographic staging.</p>
-                    <div class="vinyl-showcase-box">
-                        <div class="vinyl-spinning-disc">
-                            <div class="vinyl-center-pip"></div>
+                        <div class="p-icon-portal">
+                            <div class="portal-ring"></div>
+                            <span class="p-glyph">🎙️</span>
                         </div>
+                        <h3 class="p-title">SOUND</h3>
+                        <p class="p-desc">Your rotation of 3 defining artists and your favorite anthem provide the raw acoustic frequencies.</p>
+                        <div class="p-spec-pill">Acoustic Harmonics</div>
                     </div>
-                </div>
 
-                <!-- Feature 5: Zero-Latency Client Engine -->
-                <div class="mosaic-card">
-                    <div class="card-meta-header">
-                        <span class="meta-tag-pill">SHAREABLE ARTIFACT</span>
-                        <span class="meta-spec-id">CORE-05</span>
+                    <!-- Flow Arrow 1 -->
+                    <div class="pipeline-flow-arrow" aria-hidden="true">
+                        <div class="flow-line"></div>
+                        <span class="flow-arrow-head">→</span>
                     </div>
-                    <div class="card-feature-icon">⚡</div>
-                    <h3>Zero-Latency Client Core</h3>
-                    <p>Engineered to run 100% in your browser directly on hardware canvas. No cloud latency, zero waitlists, and complete privacy.</p>
-                    <div class="latency-status-badge">
-                        <span class="latency-live-dot"></span>
-                        <span class="latency-mono-txt">&lt; 1500ms Local Canvas Synthesis</span>
+
+                    <!-- Node 2: MOOD -->
+                    <div class="pipeline-card" data-step="2">
+                        <div class="pipeline-card-glow"></div>
+                        <div class="p-card-top">
+                            <span class="p-step-badge">STAGE 02</span>
+                            <span class="p-type-tag">HARMONIC</span>
+                        </div>
+                        <div class="p-icon-portal">
+                            <div class="portal-ring"></div>
+                            <span class="p-glyph">🎭</span>
+                        </div>
+                        <h3 class="p-title">MOOD</h3>
+                        <p class="p-desc">8 chromatic emotional universes calibrate the chromatic palette, ambient lighting, and texture density.</p>
+                        <div class="p-spec-pill">8 Emotional States</div>
+                    </div>
+
+                    <!-- Flow Arrow 2 -->
+                    <div class="pipeline-flow-arrow" aria-hidden="true">
+                        <div class="flow-line"></div>
+                        <span class="flow-arrow-head">→</span>
+                    </div>
+
+                    <!-- Node 3: VISUAL DNA -->
+                    <div class="pipeline-card" data-step="3">
+                        <div class="pipeline-card-glow"></div>
+                        <div class="p-card-top">
+                            <span class="p-step-badge">STAGE 03</span>
+                            <span class="p-type-tag">SYNTHESIS</span>
+                        </div>
+                        <div class="p-icon-portal">
+                            <div class="portal-ring"></div>
+                            <span class="p-glyph">⚡</span>
+                        </div>
+                        <h3 class="p-title">VISUAL DNA</h3>
+                        <p class="p-desc">Generative algorithms calculate custom waveform curves, golden-ratio geometry, and typography.</p>
+                        <div class="p-spec-pill">Generative Geometry</div>
+                    </div>
+
+                    <!-- Flow Arrow 3 -->
+                    <div class="pipeline-flow-arrow" aria-hidden="true">
+                        <div class="flow-line"></div>
+                        <span class="flow-arrow-head">→</span>
+                    </div>
+
+                    <!-- Node 4: IDENTITY -->
+                    <div class="pipeline-card highlight-card" data-step="4">
+                        <div class="pipeline-card-glow"></div>
+                        <div class="p-card-top">
+                            <span class="p-step-badge highlight">STAGE 04</span>
+                            <span class="p-type-tag highlight">OUTPUT</span>
+                        </div>
+                        <div class="p-icon-portal highlight">
+                            <div class="portal-ring"></div>
+                            <span class="p-glyph">🎴</span>
+                        </div>
+                        <h3 class="p-title">IDENTITY</h3>
+                        <p class="p-desc">A collectible 900x1300 Retina album-art artifact signed with the official NexaSoul authenticity seal.</p>
+                        <div class="p-spec-pill highlight">2x Retina Artifact</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ===== HOW IT WORKS (NARRATIVE STORY TIMELINE) ===== -->
+        <!-- ===== 03 JOURNEY INTRO SECTION ===== -->
         <section class="how-it-works-section" id="how-it-works">
             <div class="section-heading-block">
-                <span class="section-kicker">HOW YOUR SOUND BECOMES YOU</span>
+                <span class="section-kicker">03 // JOURNEY</span>
                 <h2 class="section-big-title">Four Steps to Your Sonic Identity</h2>
                 <p class="section-big-subtitle">A frictionless progression from personal listening habits to an iconic visual statement.</p>
             </div>
@@ -420,7 +386,7 @@
                         <span class="stage-symbol">🎙️</span>
                         <h3>Your Sound</h3>
                         <p>Name the 3 artists commanding your rotation and defining your aesthetic.</p>
-                        <span class="stage-tag">Phase 01 // Sound</span>
+                        <span class="stage-tag">Phase 01 // Artists</span>
                     </div>
                 </div>
 
@@ -456,7 +422,7 @@
             </div>
         </section>
 
-        <!-- ===== FORM SECTION (INTERACTIVE RITUAL CONSOLE) ===== -->
+        <!-- ===== 04 IDENTITY ENGINE & RESULT CONSOLE ===== -->
         <section class="ritual-form-section" id="formSection">
             <div class="ritual-ambient-glow" id="formAtmosphereGlow"></div>
 
@@ -518,7 +484,7 @@
                     </div>
 
                     <div class="phase-action-row">
-                        <button class="btn console-next-btn" onclick="nextStep(1)">
+                        <button type="button" class="btn console-next-btn" onclick="nextStep(1)">
                             <span>Continue to Anthem</span>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                         </button>
@@ -557,11 +523,11 @@
                     </div>
 
                     <div class="phase-action-row dual">
-                        <button class="btn console-back-btn" onclick="prevStep(2)">
+                        <button type="button" class="btn console-back-btn" onclick="prevStep(2)">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
                             <span>Back</span>
                         </button>
-                        <button class="btn console-next-btn" onclick="nextStep(2)">
+                        <button type="button" class="btn console-next-btn" onclick="nextStep(2)">
                             <span>Continue to Aura</span>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                         </button>
@@ -627,11 +593,11 @@
                     </div>
 
                     <div class="phase-action-row dual">
-                        <button class="btn console-back-btn" onclick="prevStep(3)">
+                        <button type="button" class="btn console-back-btn" onclick="prevStep(3)">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
                             <span>Back</span>
                         </button>
-                        <button class="btn console-generate-btn pulse-glow" id="generateBtn" onclick="generateCard()">
+                        <button type="button" class="btn console-generate-btn pulse-glow" id="generateBtn" onclick="generateCard()">
                             <span class="gen-btn-inner">
                                 <span class="sparkle-symbol">⚡</span>
                                 <span>CREATE MY IDENTITY →</span>
@@ -659,15 +625,15 @@
 
                     <!-- Actions Bar -->
                     <div class="card-action-cluster">
-                        <button class="btn action-download-btn" id="downloadBtn" onclick="downloadCard()">
+                        <button type="button" class="btn action-download-btn" id="downloadBtn" onclick="downloadCard()">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                             <span id="downloadBtnText">Download High-Res PNG</span>
                         </button>
-                        <button class="btn action-share-btn" onclick="shareCard()">
+                        <button type="button" class="btn action-share-btn" onclick="shareCard()">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
                             <span>Share Identity</span>
                         </button>
-                        <button class="btn action-reset-btn" onclick="restartForm()">
+                        <button type="button" class="btn action-reset-btn" onclick="restartForm()">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
                             <span>Synthesize Another</span>
                         </button>
@@ -734,6 +700,20 @@
             </div>
         </div>
     </footer>
+
+    <!-- ===== SIGNATURE PUMP-HANDLE CURSOR (ONE ELEMENT ONLY) ===== -->
+    <div class="signature-cursor" id="signatureCursor" aria-hidden="true">
+        <div class="cursor-pointer-dot"></div>
+        <div class="cursor-pointer-ring"></div>
+        <div class="cursor-bellows-handle">
+            <div class="handle-bellows-icon">
+                <span class="bellow-rib"></span>
+                <span class="bellow-rib"></span>
+                <span class="bellow-rib"></span>
+            </div>
+            <span class="handle-text" id="cursorHandleText">PUMP</span>
+        </div>
+    </div>
 
     <!-- Application Script -->
     <script src="script.js"></script>

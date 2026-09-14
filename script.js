@@ -304,8 +304,8 @@ if (bellowsAssembly && bellowsHandle) {
         AppState.bellows.dragStartPressure = AppState.bellows.pressure;
         bellowsAssembly.setPointerCapture(e.pointerId);
 
-        const harmoniumCursor = document.getElementById("harmoniumCursor");
-        if (harmoniumCursor) harmoniumCursor.classList.add("dragging");
+        const signatureCursor = document.getElementById("signatureCursor");
+        if (signatureCursor) signatureCursor.classList.add("cursor-dragging");
 
         dismissHarmoniumHint();
         e.preventDefault();
@@ -328,8 +328,9 @@ if (bellowsAssembly && bellowsHandle) {
             bellowsAssembly.releasePointerCapture(e.pointerId);
         } catch (err) {}
 
-        const harmoniumCursor = document.getElementById("harmoniumCursor");
-        if (harmoniumCursor) harmoniumCursor.classList.remove("dragging");
+        const signatureCursor = document.getElementById("signatureCursor");
+        if (signatureCursor) signatureCursor.classList.remove("cursor-dragging");
+        updateBellowsVisuals();
     };
 
     bellowsAssembly.addEventListener("pointerup", endBellowsDrag);
@@ -357,10 +358,10 @@ function updateBellowsVisuals() {
         pressureValDisplay.textContent = AppState.bellows.isDragging ? `PUMP ${percent}%` : `AIR ${percent}%`;
     }
 
-    // Update cursor label if dragging
-    const cursorPillText = document.getElementById("cursorPillText");
-    if (cursorPillText && AppState.bellows.isDragging) {
-        cursorPillText.textContent = `PUMPING ${Math.round(p * 100)}%`;
+    // Update signature cursor handle label
+    const cursorHandleText = document.getElementById("cursorHandleText");
+    if (cursorHandleText) {
+        cursorHandleText.textContent = AppState.bellows.isDragging ? `PUMP ${Math.round(p * 100)}%` : "PUMP";
     }
 
     // Update global CSS custom property
@@ -395,9 +396,9 @@ harmoniumKeys.forEach(key => {
         dismissHarmoniumHint();
 
         // Cursor micro-label feedback
-        const cursorPillText = document.getElementById("cursorPillText");
-        if (cursorPillText && AppState.cursor.isOverHarmonium) {
-            cursorPillText.textContent = `PLAYING ${note} (${label})`;
+        const cursorHandleText = document.getElementById("cursorHandleText");
+        if (cursorHandleText && AppState.cursor.isOverHarmonium) {
+            cursorHandleText.textContent = `${note} (${label})`;
         }
     };
 
@@ -410,9 +411,9 @@ harmoniumKeys.forEach(key => {
             velocityReadout.textContent = `VELOCITY 0.0`;
         }
 
-        const cursorPillText = document.getElementById("cursorPillText");
-        if (cursorPillText && AppState.cursor.isOverHarmonium) {
-            cursorPillText.textContent = "PLAY / PUMP";
+        const cursorHandleText = document.getElementById("cursorHandleText");
+        if (cursorHandleText && AppState.cursor.isOverHarmonium) {
+            cursorHandleText.textContent = "PUMP";
         }
     };
 
@@ -432,27 +433,33 @@ harmoniumKeys.forEach(key => {
     });
 
     key.addEventListener("mouseenter", () => {
-        const cursorPillText = document.getElementById("cursorPillText");
-        if (cursorPillText && AppState.cursor.isOverHarmonium) {
-            cursorPillText.textContent = `KEY ${note} (${label})`;
+        const cursorHandleText = document.getElementById("cursorHandleText");
+        if (cursorHandleText && AppState.cursor.isOverHarmonium) {
+            cursorHandleText.textContent = `${note} (${label})`;
         }
     });
 
     key.addEventListener("mouseleave", () => {
-        const cursorPillText = document.getElementById("cursorPillText");
-        if (cursorPillText && AppState.cursor.isOverHarmonium && !AppState.bellows.isDragging) {
-            cursorPillText.textContent = "PLAY / PUMP";
+        const cursorHandleText = document.getElementById("cursorHandleText");
+        if (cursorHandleText && AppState.cursor.isOverHarmonium && !AppState.bellows.isDragging) {
+            cursorHandleText.textContent = "PUMP";
         }
     });
 });
 
-// Keyboard hotkeys: 1 through 0 play the 10 keys
+// Keyboard hotkeys: Numbers (1-0) and Traditional Keys (A, W, S, E, D, F, T, G, Y, H)
+const keyHotkeysMap = {
+    "1": 0, "2": 1, "3": 2, "4": 3, "5": 4, "6": 5, "7": 6, "8": 7, "9": 8, "0": 9,
+    "a": 0, "w": 1, "s": 2, "e": 3, "d": 4, "f": 5, "t": 6, "g": 7, "y": 8, "h": 9,
+    "A": 0, "W": 1, "S": 2, "E": 3, "D": 4, "F": 5, "T": 6, "G": 7, "Y": 8, "H": 9
+};
+
 window.addEventListener("keydown", (e) => {
     // Only if not focused on an input element
     if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
-    const num = parseInt(e.key, 10);
-    if (!isNaN(num)) {
-        const targetIndex = num === 0 ? 9 : num - 1;
+    if (e.repeat) return;
+    if (e.key in keyHotkeysMap) {
+        const targetIndex = keyHotkeysMap[e.key];
         const targetKey = harmoniumKeys[targetIndex];
         if (targetKey && !targetKey.classList.contains("key-pressed")) {
             targetKey.dispatchEvent(new PointerEvent("pointerdown", { pointerId: 1 }));
@@ -462,9 +469,8 @@ window.addEventListener("keydown", (e) => {
 
 window.addEventListener("keyup", (e) => {
     if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
-    const num = parseInt(e.key, 10);
-    if (!isNaN(num)) {
-        const targetIndex = num === 0 ? 9 : num - 1;
+    if (e.key in keyHotkeysMap) {
+        const targetIndex = keyHotkeysMap[e.key];
         const targetKey = harmoniumKeys[targetIndex];
         if (targetKey) {
             targetKey.dispatchEvent(new PointerEvent("pointerup", { pointerId: 1 }));
@@ -472,22 +478,22 @@ window.addEventListener("keyup", (e) => {
     }
 });
 
-// Harmonium Stage 3D Tilt & Cursor Area Tracking
+// Harmonium Stage 3D Perspective & Morphing Cursor Area Tracking
 const harmoniumSystem = document.getElementById("harmoniumSystem");
 const harmoniumStage = document.getElementById("harmoniumStage");
-const harmoniumCursor = document.getElementById("harmoniumCursor");
+const signatureCursor = document.getElementById("signatureCursor");
 
 if (harmoniumSystem && !AppState.cursor.isTouch) {
     harmoniumSystem.addEventListener("mouseenter", () => {
         AppState.cursor.isOverHarmonium = true;
-        if (harmoniumCursor) harmoniumCursor.classList.add("active");
+        if (signatureCursor) signatureCursor.classList.add("cursor-mode-harmonium");
     });
 
     harmoniumSystem.addEventListener("mouseleave", () => {
         AppState.cursor.isOverHarmonium = false;
-        if (harmoniumCursor) harmoniumCursor.classList.remove("active");
+        if (signatureCursor) signatureCursor.classList.remove("cursor-mode-harmonium");
         if (harmoniumStage) {
-            harmoniumStage.style.transform = "rotateX(12deg) rotateY(-8deg)";
+            harmoniumStage.style.transform = "perspective(1200px) rotateX(10deg) rotateY(-6deg)";
         }
     });
 
@@ -496,10 +502,10 @@ if (harmoniumSystem && !AppState.cursor.isTouch) {
         const rect = harmoniumSystem.getBoundingClientRect();
         const normX = (e.clientX - rect.left) / rect.width - 0.5;
         const normY = (e.clientY - rect.top) / rect.height - 0.5;
-        // Subtle 3D perspective tilt
-        const rotY = -8 + normX * 12;
-        const rotX = 12 - normY * 10;
-        harmoniumStage.style.transform = `rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+        // Subtle, fluid 3D perspective tilt
+        const rotY = -6 + normX * 10;
+        const rotX = 10 - normY * 8;
+        harmoniumStage.style.transform = `perspective(1200px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
     });
 }
 
@@ -649,15 +655,16 @@ const cursorGlow = document.getElementById("cursorGlow");
 function masterEngineLoop() {
     // 1. Interpolate Cursor Position with Smooth Inertia
     if (!AppState.cursor.isTouch) {
-        AppState.cursor.currentX += (AppState.cursor.x - AppState.cursor.currentX) * 0.18;
-        AppState.cursor.currentY += (AppState.cursor.y - AppState.cursor.currentY) * 0.18;
+        AppState.cursor.currentX += (AppState.cursor.x - AppState.cursor.currentX) * 0.22;
+        AppState.cursor.currentY += (AppState.cursor.y - AppState.cursor.currentY) * 0.22;
 
         if (cursorGlow) {
             cursorGlow.style.transform = `translate(${AppState.cursor.currentX}px, ${AppState.cursor.currentY}px)`;
         }
 
-        if (harmoniumCursor && AppState.cursor.isOverHarmonium) {
-            harmoniumCursor.style.transform = `translate3d(${AppState.cursor.currentX + 12}px, ${AppState.cursor.currentY + 12}px, 0)`;
+        const signatureCursor = document.getElementById("signatureCursor");
+        if (signatureCursor) {
+            signatureCursor.style.transform = `translate3d(${AppState.cursor.currentX}px, ${AppState.cursor.currentY}px, 0)`;
         }
     }
 
@@ -676,9 +683,14 @@ function masterEngineLoop() {
     // 4. Update Constellation Particles
     updateParticles();
 
+    // 5. Update Confetti Particles (if active)
+    if (confettiActive) {
+        updateConfetti();
+    }
+
     requestAnimationFrame(masterEngineLoop);
 }
-requestAnimationFrame(masterEngineLoop);
+masterEngineLoop();
 
 // ===== 9. CELEBRATION CONFETTI ENGINE =====
 const confettiCanvas = document.getElementById("confettiCanvas");
@@ -736,20 +748,17 @@ function launchConfetti(count = 160) {
         confettiPieces.push(new Confetti());
     }
     confettiActive = true;
-    animateConfetti();
 }
 
-function animateConfetti() {
-    if (!confettiActive || !cCtx) return;
+function updateConfetti() {
+    if (!confettiActive || !cCtx || !confettiCanvas) return;
     cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
     confettiPieces.forEach(c => {
         c.update();
         c.draw();
     });
     confettiPieces = confettiPieces.filter(c => c.y < confettiCanvas.height + 30);
-    if (confettiPieces.length > 0) {
-        requestAnimationFrame(animateConfetti);
-    } else {
+    if (confettiPieces.length === 0) {
         confettiActive = false;
         cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
     }
@@ -783,6 +792,11 @@ function toggleMenu() {
 }
 
 function scrollToForm() {
+    // Compress bellows as tactile physical trigger
+    AppState.bellows.pressure = 0.85;
+    updateBellowsVisuals();
+    dismissHarmoniumHint();
+
     const formSec = document.getElementById("formSection");
     if (formSec) {
         formSec.scrollIntoView({ behavior: "smooth" });
@@ -968,6 +982,7 @@ function generateCard() {
     // Trigger visual harmonium cascade
     AppState.bellows.pressure = 0.95;
     updateBellowsVisuals();
+    dismissHarmoniumHint();
 
     // Cascading key wave
     harmoniumKeys.forEach((key, idx) => {
