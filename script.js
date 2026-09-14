@@ -30,11 +30,12 @@ const AppState = {
         lastNoteName: "Sa"
     },
 
-    // Progressive Web Audio (Muted by Default, Progressive Enhancement)
+    // Progressive Web Audio (Active by Default, Dual-Reed Acoustic Timbre)
     audio: {
         ctx: null,
-        isMuted: true,
+        isMuted: false,
         masterGain: null,
+        compressor: null,
         activeOscs: new Map()
     },
 
@@ -182,85 +183,140 @@ function showToast(message, duration = 3000) {
     }, duration);
 }
 
-// ===== 4. PROGRESSIVE WEB AUDIO SYNTHESIZER =====
+// ===== 4. PROGRESSIVE WEB AUDIO SYNTHESIZER (DUAL-REED HARMONIUM ENGINE) =====
 function initAudioEngine() {
     if (AppState.audio.ctx) return;
     try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContext) return;
-        AppState.audio.ctx = new AudioContext();
-        AppState.audio.masterGain = AppState.audio.ctx.createGain();
-        AppState.audio.masterGain.gain.setValueAtTime(0.25, AppState.audio.ctx.currentTime);
-        AppState.audio.masterGain.connect(AppState.audio.ctx.destination);
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        
+        const ctx = new AudioContextClass();
+        AppState.audio.ctx = ctx;
+
+        // Dedicated Master Gain Node (Audible, calibrated level: 0.75)
+        const masterGain = ctx.createGain();
+        masterGain.gain.setValueAtTime(AppState.audio.isMuted ? 0.0001 : 0.75, ctx.currentTime);
+        AppState.audio.masterGain = masterGain;
+
+        // Dynamics Compressor / Limiter (Prevents clipping & makes notes uniformly rich & audible)
+        const compressor = ctx.createDynamicsCompressor();
+        compressor.threshold.setValueAtTime(-18, ctx.currentTime); // dB
+        compressor.knee.setValueAtTime(10, ctx.currentTime);       // dB
+        compressor.ratio.setValueAtTime(4, ctx.currentTime);        // 4:1 compression
+        compressor.attack.setValueAtTime(0.003, ctx.currentTime);   // 3ms quick catch
+        compressor.release.setValueAtTime(0.15, ctx.currentTime);   // 150ms smooth release
+        AppState.audio.compressor = compressor;
+
+        // Routing: Master Gain -> Compressor -> Audio Destination
+        masterGain.connect(compressor);
+        compressor.connect(ctx.destination);
     } catch (e) {
-        console.warn("Web Audio initialization skipped:", e);
+        console.warn("Web Audio initialization error:", e);
+    }
+}
+
+function ensureAudioContext() {
+    if (!AppState.audio.ctx) {
+        initAudioEngine();
+    }
+    if (AppState.audio.ctx && AppState.audio.ctx.state === "suspended") {
+        AppState.audio.ctx.resume().catch(() => {});
     }
 }
 
 function toggleAudioEngine() {
-    initAudioEngine();
+    ensureAudioContext();
     AppState.audio.isMuted = !AppState.audio.isMuted;
-    
-    if (AppState.audio.ctx && AppState.audio.ctx.state === "suspended") {
-        AppState.audio.ctx.resume();
-    }
 
     const soundBtn = document.getElementById("soundToggleBtn");
     const audioIcon = document.getElementById("audioIcon");
     const audioLabel = document.getElementById("audioLabel");
 
-    if (AppState.audio.isMuted) {
-        soundBtn.classList.remove("active");
-        audioIcon.textContent = "🔇";
-        audioLabel.textContent = "AUDIO: MUTED";
-        showToast("🔇 Audio Engine Muted");
-    } else {
-        soundBtn.classList.add("active");
-        audioIcon.textContent = "🔊";
-        audioLabel.textContent = "AUDIO: ACTIVE";
-        showToast("🔊 Audio Engine Active — Play Keys!");
+    if (AppState.audio.ctx && AppState.audio.masterGain) {
+        const now = AppState.audio.ctx.currentTime;
+        AppState.audio.masterGain.gain.cancelScheduledValues(now);
+        AppState.audio.masterGain.gain.setValueAtTime(AppState.audio.masterGain.gain.value, now);
+
+        if (AppState.audio.isMuted) {
+            AppState.audio.masterGain.gain.linearRampToValueAtTime(0.0001, now + 0.06);
+            if (soundBtn) soundBtn.classList.remove("active");
+            if (audioIcon) audioIcon.textContent = "🔇";
+            if (audioLabel) audioLabel.textContent = "SOUND: OFF";
+            showToast("🔇 Harmonium Audio Muted");
+        } else {
+            AppState.audio.masterGain.gain.linearRampToValueAtTime(0.75, now + 0.06);
+            if (soundBtn) soundBtn.classList.add("active");
+            if (audioIcon) audioIcon.textContent = "🔊";
+            if (audioLabel) audioLabel.textContent = "SOUND: ON";
+            showToast("🔊 Harmonium Audio Active — Play the Keys!");
+        }
     }
     dismissHarmoniumHint();
 }
 
 function playHarmonicTone(freq, keyId) {
-    if (AppState.audio.isMuted || !AppState.audio.ctx) return;
-    if (AppState.audio.ctx.state === "suspended") {
-        AppState.audio.ctx.resume();
-    }
+    if (AppState.audio.isMuted) return;
+    ensureAudioContext();
+    if (!AppState.audio.ctx || !AppState.audio.masterGain) return;
 
-    // Stop existing tone for this key if active
+    // Stop existing tone for this key immediately to avoid overlap
     stopHarmonicTone(keyId);
 
     try {
         const ctx = AppState.audio.ctx;
         const now = ctx.currentTime;
+        const pressure = AppState.bellows.pressure || 0.25;
 
-        // Rich Warm Harmonium Simulation (Triangle Oscillator + Gentle Lowpass)
-        const osc = ctx.createOscillator();
-        const gainNode = ctx.createGain();
+        // Dual-Reed Acoustic Timbre Synthesis:
+        // Fundamental reed: Sawtooth wave provides the rich acoustic brass reed buzz
+        const osc1 = ctx.createOscillator();
+        osc1.type = "sawtooth";
+        const pitchBend = freq * (1 + (pressure - 0.25) * 0.012);
+        osc1.frequency.setValueAtTime(pitchBend, now);
+
+        // Body reed: Triangle wave provides warm fundamental core with micro-chorus
+        const osc2 = ctx.createOscillator();
+        osc2.type = "triangle";
+        osc2.frequency.setValueAtTime(pitchBend * 1.002, now); // +2 cents acoustic chorus
+
+        // Internal balancing gains
+        const osc1Gain = ctx.createGain();
+        osc1Gain.gain.setValueAtTime(0.65, now);
+        const osc2Gain = ctx.createGain();
+        osc2Gain.gain.setValueAtTime(0.35, now);
+
+        osc1.connect(osc1Gain);
+        osc2.connect(osc2Gain);
+
+        // Resonant Acoustic Wood Filter (Modulated by Bellows Swell)
         const filter = ctx.createBiquadFilter();
-
-        osc.type = "triangle";
-        // Frequency is slightly modulated by bellows pressure
-        const modulatedFreq = freq * (1 + (AppState.bellows.pressure - 0.25) * 0.05);
-        osc.frequency.setValueAtTime(modulatedFreq, now);
-
         filter.type = "lowpass";
-        filter.frequency.setValueAtTime(900 + AppState.bellows.pressure * 800, now);
+        const cutoff = 1400 + pressure * 1600; // 1400Hz to 3000Hz
+        filter.frequency.setValueAtTime(cutoff, now);
+        filter.Q.setValueAtTime(1.8, now); // Warm resonant wooden cavity
 
-        // Gentle envelope: Quick attack, sustained while pressed
-        gainNode.gain.setValueAtTime(0.001, now);
-        gainNode.gain.exponentialRampToValueAtTime(0.35 * Math.max(0.2, AppState.bellows.pressure), now + 0.04);
+        osc1Gain.connect(filter);
+        osc2Gain.connect(filter);
 
-        osc.connect(filter);
-        filter.connect(gainNode);
-        gainNode.connect(AppState.audio.masterGain);
+        // Note Envelope Gain Node
+        const noteGain = ctx.createGain();
 
-        osc.start(now);
-        AppState.audio.activeOscs.set(keyId, { osc, gainNode });
+        // Immediate snappy attack (8ms) -> instantaneous, audible & zero click
+        const targetPeak = 0.72 + (pressure * 0.18); // 0.72 to 0.90
+        noteGain.gain.setValueAtTime(0.0001, now);
+        noteGain.gain.linearRampToValueAtTime(targetPeak, now + 0.008);
+        // Gentle decay into sustained body (~88% of peak)
+        noteGain.gain.linearRampToValueAtTime(targetPeak * 0.88, now + 0.12);
+
+        filter.connect(noteGain);
+        noteGain.connect(AppState.audio.masterGain);
+
+        osc1.start(now);
+        osc2.start(now);
+
+        AppState.audio.activeOscs.set(keyId, { osc1, osc2, noteGain, filter, osc1Gain, osc2Gain });
     } catch (e) {
-        // Safe fail
+        console.warn("Harmonic tone playback error:", e);
     }
 }
 
@@ -269,18 +325,85 @@ function stopHarmonicTone(keyId) {
     if (!node || !AppState.audio.ctx) return;
 
     try {
-        const now = AppState.audio.ctx.currentTime;
-        node.gainNode.gain.cancelScheduledValues(now);
-        node.gainNode.gain.setValueAtTime(node.gainNode.gain.value, now);
-        node.gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+        const ctx = AppState.audio.ctx;
+        const now = ctx.currentTime;
+        const releaseTime = 0.22; // Natural harmonium air decay
+
+        node.noteGain.gain.cancelScheduledValues(now);
+        node.noteGain.gain.setValueAtTime(node.noteGain.gain.value, now);
+        node.noteGain.gain.exponentialRampToValueAtTime(0.0001, now + releaseTime);
+
         setTimeout(() => {
             try {
-                node.osc.stop();
-                node.osc.disconnect();
+                node.osc1.stop();
+                node.osc2.stop();
+                node.osc1.disconnect();
+                node.osc2.disconnect();
+                node.noteGain.disconnect();
+                node.filter.disconnect();
             } catch (e) {}
-        }, 280);
+        }, (releaseTime + 0.05) * 1000);
     } catch (e) {}
     AppState.audio.activeOscs.delete(keyId);
+}
+
+// Cinematic Generation Flourish (Ascending Harmonium Chords: Sa, Ga, Pa, Sa')
+function playGenerationChord() {
+    if (AppState.audio.isMuted) return;
+    ensureAudioContext();
+    if (!AppState.audio.ctx || !AppState.audio.masterGain) return;
+
+    try {
+        const ctx = AppState.audio.ctx;
+        const now = ctx.currentTime;
+        const notes = [261.63, 329.63, 392.00, 523.25]; // Sa, Ga, Pa, High Sa
+
+        notes.forEach((freq, idx) => {
+            const startTime = now + idx * 0.15;
+            const duration = 1.15 - idx * 0.10;
+
+            const osc1 = ctx.createOscillator();
+            const osc2 = ctx.createOscillator();
+            const filter = ctx.createBiquadFilter();
+            const noteGain = ctx.createGain();
+
+            osc1.type = "sawtooth";
+            osc1.frequency.setValueAtTime(freq, startTime);
+
+            osc2.type = "triangle";
+            osc2.frequency.setValueAtTime(freq * 1.002, startTime);
+
+            filter.type = "lowpass";
+            filter.frequency.setValueAtTime(1600, startTime);
+            filter.frequency.exponentialRampToValueAtTime(3600, startTime + duration * 0.6);
+            filter.Q.setValueAtTime(1.5, startTime);
+
+            const osc1Gain = ctx.createGain();
+            osc1Gain.gain.setValueAtTime(0.55, startTime);
+            const osc2Gain = ctx.createGain();
+            osc2Gain.gain.setValueAtTime(0.35, startTime);
+
+            osc1.connect(osc1Gain);
+            osc2.connect(osc2Gain);
+            osc1Gain.connect(filter);
+            osc2Gain.connect(filter);
+
+            noteGain.gain.setValueAtTime(0.0001, startTime);
+            noteGain.gain.linearRampToValueAtTime(0.52, startTime + 0.03);
+            noteGain.gain.setValueAtTime(0.44, startTime + duration * 0.65);
+            noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+            filter.connect(noteGain);
+            noteGain.connect(AppState.audio.masterGain);
+
+            osc1.start(startTime);
+            osc2.start(startTime);
+            osc1.stop(startTime + duration + 0.05);
+            osc2.stop(startTime + duration + 0.05);
+        });
+    } catch (e) {
+        console.warn("Generation chord error:", e);
+    }
 }
 
 // ===== 5. HARMONIUM INTERACTION CONTROLLER =====
@@ -364,6 +487,21 @@ function updateBellowsVisuals() {
         cursorHandleText.textContent = AppState.bellows.isDragging ? `PUMP ${Math.round(p * 100)}%` : "PUMP";
     }
 
+    // Dynamic Acoustic Swell on vibrating reeds (No node allocations!)
+    if (AppState.audio.ctx && AppState.audio.activeOscs.size > 0) {
+        const now = AppState.audio.ctx.currentTime;
+        AppState.audio.activeOscs.forEach(node => {
+            try {
+                if (node.filter) {
+                    node.filter.frequency.setTargetAtTime(1400 + p * 1600, now, 0.04);
+                }
+                if (node.noteGain) {
+                    node.noteGain.gain.setTargetAtTime((0.72 + p * 0.18) * 0.88, now, 0.04);
+                }
+            } catch (err) {}
+        });
+    }
+
     // Update global CSS custom property
     document.documentElement.style.setProperty("--bellows-compress", p.toFixed(2));
 }
@@ -380,19 +518,24 @@ harmoniumKeys.forEach(key => {
     const label = key.dataset.label || note;
 
     const activateKey = () => {
+        // 1. Immediate Audio Trigger (ultra-low latency)
+        ensureAudioContext();
+        playHarmonicTone(freq, keyId);
+
+        // 2. Physical visual depression
         key.classList.add("key-pressed");
         AppState.keys.activeKeys.add(keyId);
         AppState.keys.lastFrequency = freq;
         AppState.keys.lastNoteName = note;
 
+        // 3. Telemetry Readouts
         if (freqReadout) {
             freqReadout.textContent = `${freq.toFixed(1)} Hz // ${note} (${label})`;
         }
         if (velocityReadout) {
-            velocityReadout.textContent = `VELOCITY ${(0.6 + AppState.bellows.pressure * 0.4).toFixed(2)}`;
+            velocityReadout.textContent = `VELOCITY ${(0.72 + AppState.bellows.pressure * 0.18).toFixed(2)}`;
         }
 
-        playHarmonicTone(freq, keyId);
         dismissHarmoniumHint();
 
         // Cursor micro-label feedback
@@ -459,6 +602,7 @@ window.addEventListener("keydown", (e) => {
     if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
     if (e.repeat) return;
     if (e.key in keyHotkeysMap) {
+        ensureAudioContext();
         const targetIndex = keyHotkeysMap[e.key];
         const targetKey = harmoniumKeys[targetIndex];
         if (targetKey && !targetKey.classList.contains("key-pressed")) {
@@ -978,6 +1122,10 @@ function generateCard() {
 
     if (AppState.isGenerating) return;
     AppState.isGenerating = true;
+
+    // Harmonious Audio Payoff: Ascending reed chord sequence
+    ensureAudioContext();
+    playGenerationChord();
 
     // Trigger visual harmonium cascade
     AppState.bellows.pressure = 0.95;
@@ -1506,3 +1654,11 @@ function restartForm() {
 
     scrollToForm();
 }
+
+// ===== 18. BROWSER AUTOPLAY COMPLIANCE (FIRST GESTURE UNLOCK) =====
+// Browsers require user interaction before playing audio; unlock proactively on first interaction
+['pointerdown', 'click', 'touchstart', 'keydown'].forEach(eventName => {
+    window.addEventListener(eventName, () => {
+        ensureAudioContext();
+    }, { passive: true });
+});
