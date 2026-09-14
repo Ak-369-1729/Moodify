@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodify by NexaSoul — Living Musical Instrument & Identity Engine</title>
+    <meta name="description" content="An original interactive music identity generator by NexaSoul. Featuring the Living Digital Harmonium interface: transform sound, anthem, and mood into an iconic visual artifact.">
+    <meta name="theme-color" content="#06080d">
+
+    <!-- High-Impact Google Fonts: Outfit (Display Headline), Plus Jakarta Sans (Clean UI), JetBrains Mono (Telemetry) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-mood="default">
+
+    <!-- Interactive Cursor Glow Spotlight (Subtle Ambient Following) -->
+    <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+    <!-- Custom Morphing Harmonium Bellows Cursor (Only active over the instrument) -->
+    <div class="harmonium-cursor" id="harmoniumCursor" aria-hidden="true">
+        <div class="cursor-pump-symbol">
+            <span class="pump-pleat"></span>
+            <span class="pump-pleat"></span>
+            <span class="pump-pleat"></span>
+            <span class="pump-handle-bar"></span>
+            <span class="pump-center-pip"></span>
+        </div>
+        <span class="cursor-text-pill" id="cursorPillText">PUMP / PLAY</span>
+    </div>
+
+    <!-- Controlled Atmospheric Background (Calm Behind Text, Dynamic on Right) -->
+    <div class="bg-atmosphere" aria-hidden="true">
+        <div class="ambient-scrim-left"></div>
+        <div class="ambient-orb orb-right-engine" id="engineAura"></div>
+        <div class="ambient-orb orb-bottom-glow"></div>
+        <div class="subtle-cyber-grid"></div>
+    </div>
+
+    <!-- Constellation Canvas (Extremely subtle, 0 text interference) -->
+    <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+    <!-- Celebration Fireworks Confetti Canvas -->
+    <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <!-- Authentic NexaSoul Brand Placement (No Box, No Tiny Badge) -->
+            <a href="#home" class="brand-unit" aria-label="Moodify by NexaSoul">
+                <img src="nexasoul-logo-alpha.png" alt="NexaSoul" class="nexasoul-logo-asset" onerror="this.onerror=null;this.src='nexasoul-logo-core.jpg';">
+                <div class="brand-divider-slash" aria-hidden="true">/</div>
+                <div class="brand-text-group">
+                    <span class="product-title">MOODIFY</span>
+                    <span class="product-descriptor">VISUAL MUSIC IDENTITY</span>
+                </div>
+            </a>
+
+            <nav class="nav-links" id="navLinks">
+                <a href="#home" class="nav-item active">Experience</a>
+                <a href="#features" class="nav-item">Architecture</a>
+                <a href="#how-it-works" class="nav-item">Journey</a>
+                <a href="#formSection" class="nav-item">Identity Engine</a>
+                <button class="btn nav-cta-btn" onclick="scrollToForm()">
+                    <span>Create Card</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </button>
+            </nav>
+
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation menu" aria-expanded="false" onclick="toggleMenu()">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer Backdrop -->
+    <div class="mobile-nav-backdrop" id="mobileNavBackdrop" onclick="toggleMenu()"></div>
+
+    <main>
+        <!-- ===== HERO SECTION (TWO-ZONE ART-DIRECTED CINEMATIC COMPOSITION) ===== -->
+        <section class="hero-section" id="home">
+            <div class="hero-container">
+                
+                <!-- LEFT ZONE (~50%): High-Contrast Dominant Typography & Clear Action -->
+                <div class="hero-left-column">
+                    <div class="hero-eyebrow-tag">
+                        <span class="eyebrow-pulse-dot"></span>
+                        <span class="eyebrow-brand">NEXASOUL CREATIVE LAB</span>
+                        <span class="eyebrow-sep">//</span>
+                        <span class="eyebrow-sub">LIVING HARMONIC ENGINE</span>
+                    </div>
+
+                    <!-- Dominant, Massive Headline with Intentional Contrast -->
+                    <h1 class="hero-headline">
+                        <span class="hl-line">YOUR MUSIC</span>
+                        <span class="hl-line contrast-accent">HAS A</span>
+                        <span class="hl-line gradient-callout">VISUAL</span>
+                        <span class="hl-line">IDENTITY.</span>
+                    </h1>
+
+                    <p class="hero-manifesto-text">
+                        Every track on loop leaves an emotional frequency. Moodify unites the soul of traditional acoustic expression with digital neural synthesis — translating your top artists, anthem, and mood into an iconic visual artifact.
+                    </p>
+
+                    <div class="hero-action-cluster">
+                        <button class="btn hero-primary-cta pulse-glow" onclick="scrollToForm()">
+                            <span>CREATE MY IDENTITY</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                        </button>
+                        <button class="btn hero-secondary-cta" onclick="scrollToHow()">
+                            <span>Explore The Pipeline</span>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg>
+                        </button>
+                    </div>
+
+                    <!-- Clear Product Journey Indicator (No Fake Stats!) -->
+                    <div class="journey-indicator-bar" aria-label="Identity generation journey">
+                        <div class="j-step">
+                            <span class="j-step-num">01</span>
+                            <span class="j-step-label">SOUND</span>
+                        </div>
+                        <span class="j-arrow">→</span>
+                        <div class="j-step">
+                            <span class="j-step-num">02</span>
+                            <span class="j-step-label">ANTHEM</span>
+                        </div>
+                        <span class="j-arrow">→</span>
+                        <div class="j-step">
+                            <span class="j-step-num">03</span>
+                            <span class="j-step-label">MOOD</span>
+                        </div>
+                        <span class="j-arrow">→</span>
+                        <div class="j-step highlight-step">
+                            <span class="j-step-num">04</span>
+                            <span class="j-step-label">IDENTITY CARD</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT ZONE (~50%): THE LIVING DIGITAL HARMONIUM (SIGNATURE VISUAL OBJECT) -->
+                <div class="hero-right-column">
+                    <div class="digital-harmonium-system" id="harmoniumSystem">
+                        <!-- Atmospheric Instrument Halo -->
+                        <div class="harmonium-ambient-aura" id="harmoniumAura"></div>
+
+                        <!-- Contextual Engineering Annotations (Minimal, Art-Directed) -->
+                        <div class="instrument-tag tag-pressure" id="tagPressure">
+                            <span class="tag-pip lime"></span>
+                            <span>BELLOWS // <strong id="pressureVal">IDLE 25%</strong></span>
+                        </div>
+                        <div class="instrument-tag tag-resonance">
+                            <span class="tag-pip cyan"></span>
+                            <span>RESONANCE // 48.0 kHz 24-BIT</span>
+                        </div>
+                        <div class="instrument-tag tag-engine" id="tagMoodAura">
+                            <span class="tag-pip violet"></span>
+                            <span>MOOD AURA // <strong id="harmoniumMoodTag">SYNTHWAVE</strong></span>
+                        </div>
+
+                        <!-- Interactive Discovery Hint (Disappears on first interaction) -->
+                        <div class="harmonium-discovery-hint" id="harmoniumHint">
+                            <span class="hint-icon">✦</span>
+                            <span class="hint-text">Touch the sound · Drag bellows or play keys</span>
+                        </div>
+
+                        <!-- Web Audio API Progressive Enhancement Toggle (Silent By Default) -->
+                        <button type="button" class="audio-toggle-btn" id="soundToggleBtn" onclick="toggleAudioEngine()" aria-label="Toggle progressive Web Audio">
+                            <span class="audio-state-icon" id="audioIcon">🔇</span>
+                            <span class="audio-state-label" id="audioLabel">AUDIO: MUTED</span>
+                        </button>
+
+                        <!-- The 3D Instrument Stage -->
+                        <div class="harmonium-stage" id="harmoniumStage">
+                            
+                            <!-- Interactive Bellows Unit (Left/Rear Accordion Multi-Fold Assembly) -->
+                            <div class="harmonium-bellows-assembly" id="harmoniumBellows" role="slider" aria-label="Harmonium Bellows Air Pump" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25">
+                                <div class="bellows-housing">
+                                    <div class="bellows-pleats-stack" id="bellowsPleats">
+                                        <div class="bellows-fold fold-1"></div>
+                                        <div class="bellows-fold fold-2"></div>
+                                        <div class="bellows-fold fold-3"></div>
+                                        <div class="bellows-fold fold-4"></div>
+                                        <div class="bellows-fold fold-5"></div>
+                                        <div class="bellows-fold fold-6"></div>
+                                    </div>
+                                    <!-- Mechanical Pump Handle (Draggable) -->
+                                    <div class="bellows-handle" id="bellowsHandle">
+                                        <div class="handle-grip"></div>
+                                        <span class="handle-label">PUMP AIR</span>
+                                    </div>
+                                </div>
+                                <div class="bellows-exhaust-ports">
+                                    <span></span><span></span><span></span>
+                                </div>
+                            </div>
+
+                            <!-- Main Harmonium Chassis (Obsidian Wood & Brushed Titanium) -->
+                            <div class="harmonium-body">
+                                <!-- Top Bezel with NexaSoul Laser Accent -->
+                                <div class="harmonium-top-fascia">
+                                    <div class="fascia-brand">
+                                        <span class="fascia-laser-dot"></span>
+                                        <span class="fascia-text">NEXASOUL HARMONIC SYNTHESIZER</span>
+                                    </div>
+                                    <div class="fascia-meters">
+                                        <span class="meter-pip active" id="liveMeter1"></span>
+                                        <span class="meter-pip active" id="liveMeter2"></span>
+                                        <span class="meter-pip" id="liveMeter3"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Integrated Resonator Display (Real-Time Harmonic Waveform) -->
+                                <div class="harmonium-resonator-screen">
+                                    <canvas id="harmoniumWaveCanvas" width="460" height="84" aria-label="Harmonic Frequency Waveform"></canvas>
+                                    <div class="resonator-glow-overlay"></div>
+                                    <div class="screen-meta-row">
+                                        <span class="screen-frequency" id="freqReadout">432.0 Hz HARMONIC</span>
+                                        <span class="screen-velocity" id="velocityReadout">VELOCITY 0.0</span>
+                                    </div>
+                                </div>
+
+                                <!-- Precision Keybed: 10 Stylized Interactive Keys -->
+                                <div class="harmonium-keybed" id="harmoniumKeybed" role="toolbar" aria-label="Harmonium Visual Keyboard">
+                                    <!-- Key 1: Sa / 432Hz -->
+                                    <button type="button" class="h-key key-natural" data-note="Sa" data-freq="261.6" data-label="432Hz" data-key="1" aria-label="Key Sa 432Hz">
+                                        <span class="key-surface"></span>
+                                        <span class="key-label">Sa</span>
+                                        <span class="key-freq">432Hz</span>
+                                    </button>
+                                    <!-- Key 2: re (accidental) -->
+                                    <button type="button" class="h-key key-accidental" data-note="re" data-freq="277.2" data-label="re" data-key="2" aria-label="Key re 277Hz">
+                                        <span class="key-surface"></span>
+                                    </button>
+                                    <!-- Key 3: Re / 528Hz -->
+                                    <button type="button" class="h-key key-natural" data-note="Re" data-freq="293.7" data-label="528Hz" data-key="3" aria-label="Key Re 528Hz">
+                                        <span class="key-surface"></span>
+                                        <span class="key-label">Re</span>
+                                        <span class="key-freq">528Hz</span>
+                                    </button>
+                                    <!-- Key 4: ga (accidental) -->
+                                    <button type="button" class="h-key key-accidental" data-note="ga" data-freq="311.1" data-label="ga" data-key="4" aria-label="Key ga 311Hz">
+                                        <span class="key-surface"></span>
+                                    </button>
+                                    <!-- Key 5: Ga / 639Hz -->
+                                    <button type="button" class="h-key key-natural" data-note="Ga" data-freq="329.6" data-label="639Hz" data-key="5" aria-label="Key Ga 639Hz">
+                                        <span class="key-surface"></span>
+                                        <span class="key-label">Ga</span>
+                                        <span class="key-freq">639Hz</span>
+                                    </button>
+                                    <!-- Key 6: Ma / 741Hz -->
+                                    <button type="button" class="h-key key-natural" data-note="Ma" data-freq="349.2" data-label="741Hz" data-key="6" aria-label="Key Ma 741Hz">
+                                        <span class="key-surface"></span>
+                                        <span class="key-label">Ma</span>
+                                        <span class="key-freq">741Hz</span>
+                                    </button>
+                                    <!-- Key 7: ma (accidental) -->
+                                    <button type="button" class="h-key key-accidental" data-note="ma" data-freq="370.0" data-label="ma" data-key="7" aria-label="Key ma 370Hz">
+                                        <span class="key-surface"></span>
+                                    </button>
+                                    <!-- Key 8: Pa / 852Hz -->
+                                    <button type="button" class="h-key key-natural" data-note="Pa" data-freq="392.0" data-label="852Hz" data-key="8" aria-label="Key Pa 852Hz">
+                                        <span class="key-surface"></span>
+                                        <span class="key-label">Pa</span>
+                                        <span class="key-freq">852Hz</span>
+                                    </button>
+                                    <!-- Key 9: dha (accidental) -->
+                                    <button type="button" class="h-key key-accidental" data-note="dha" data-freq="415.3" data-label="dha" data-key="9" aria-label="Key dha 415Hz">
+                                        <span class="key-surface"></span>
+                                    </button>
+                                    <!-- Key 10: Dha / 963Hz -->
+                                    <button type="button" class="h-key key-natural" data-note="Dha" data-freq="440.0" data-label="963Hz" data-key="10" aria-label="Key Dha 963Hz">
+                                        <span class="key-surface"></span>
+                                        <span class="key-label">Dha</span>
+                                        <span class="key-freq">963Hz</span>
+                                    </button>
+                                </div>
+
+                                <!-- Bottom Brass Base Rail & Serial Tag -->
+                                <div class="harmonium-base-rail">
+                                    <span class="base-screws left"></span>
+                                    <span class="base-identity-stamp">NEXASOUL // MOOD ENGINE INTERFACE</span>
+                                    <span class="base-screws right"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ===== FEATURES SECTION (CONNECTING INSTRUMENT TO VISUAL IDENTITY) ===== -->
+        <section class="features-mosaic-section" id="features">
+            <div class="section-heading-block">
+                <span class="section-kicker">ENGINE ARCHITECTURE</span>
+                <h2 class="section-big-title">Turn Your Taste Into a Visual Language.</h2>
+                <p class="section-big-subtitle">Every frequency, stroke, and harmonic rhythm translates systematically into mathematical vectors, mood palettes, and gallery-grade typography.</p>
+            </div>
+
+            <!-- Asymmetric Editorial Grid -->
+            <div class="mosaic-grid">
+                <!-- Primary Anchor Feature (Spans 8 Columns) -->
+                <div class="mosaic-card card-primary-highlight">
+                    <div class="mosaic-card-glow"></div>
+                    <div class="card-meta-header">
+                        <span class="meta-tag-pill">VISUAL IDENTITY</span>
+                        <span class="meta-spec-id">CORE-01</span>
+                    </div>
+                    <h3>Your Artists Become Visual Texture</h3>
+                    <p>Unlike disposable social graphics, Moodify renders an ultra-crisp, high-density 900x1300 physical canvas poster calibrated for Instagram stories, high-res downloads, and physical print exhibition.</p>
+                    
+                    <div class="card-demo-preview">
+                        <div class="demo-card-frame">
+                            <div class="demo-card-top">
+                                <span class="demo-brand-txt">NEXASOUL</span>
+                                <span class="demo-status-pill">VERIFIED IDENTITY</span>
+                            </div>
+                            <div class="demo-soundwave-ribbon">
+                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                            <div class="demo-card-bottom">
+                                <span class="demo-serial">#NS-8842-IDENTITY // 48kHz</span>
+                                <span class="demo-year">2026</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 2: 8 Mood Universes -->
+                <div class="mosaic-card">
+                    <div class="card-meta-header">
+                        <span class="meta-tag-pill">MOOD ENGINE</span>
+                        <span class="meta-spec-id">CORE-02</span>
+                    </div>
+                    <div class="card-feature-icon">🎭</div>
+                    <h3>Your Mood Controls The Atmosphere</h3>
+                    <p>From the crushing depths of Gothic Grunge to the celestial calm of Peaceful Classical, each mood commands an original chromatic gradient mesh.</p>
+                    <div class="swatches-palette-row">
+                        <span class="swatch-item gothic" title="Gothic Grunge"></span>
+                        <span class="swatch-item lofi" title="Cozy Lo-Fi"></span>
+                        <span class="swatch-item energy" title="Electric Energy"></span>
+                        <span class="swatch-item synth" title="Dreamy Synthwave"></span>
+                        <span class="swatch-item rnb" title="Chill R&B"></span>
+                        <span class="swatch-item folk" title="Indie Folk"></span>
+                        <span class="swatch-item hiphop" title="Hype Hip-Hop"></span>
+                        <span class="swatch-item classical" title="Peaceful Classical"></span>
+                    </div>
+                </div>
+
+                <!-- Feature 3: Dynamic Vibe Spectrum -->
+                <div class="mosaic-card">
+                    <div class="card-meta-header">
+                        <span class="meta-tag-pill">HARMONIC METRICS</span>
+                        <span class="meta-spec-id">CORE-03</span>
+                    </div>
+                    <div class="card-feature-icon">📊</div>
+                    <h3>Multi-Axis Vibe Radar</h3>
+                    <p>Algorithmic calculation of chill resonance, groove coefficient, electrical voltage, and atmospheric depth.</p>
+                    <div class="radar-mini-stack">
+                        <div class="radar-row"><span>Chill</span><div class="r-track"><div class="r-fill" style="width: 85%"></div></div><span class="r-num">85%</span></div>
+                        <div class="radar-row"><span>Voltage</span><div class="r-track"><div class="r-fill" style="width: 92%"></div></div><span class="r-num">92%</span></div>
+                        <div class="radar-row"><span>Depth</span><div class="r-track"><div class="r-fill" style="width: 78%"></div></div><span class="r-num">78%</span></div>
+                    </div>
+                </div>
+
+                <!-- Feature 4: Featured Anthem Spotlight -->
+                <div class="mosaic-card">
+                    <div class="card-meta-header">
+                        <span class="meta-tag-pill">TRACK SPOTLIGHT</span>
+                        <span class="meta-spec-id">CORE-04</span>
+                    </div>
+                    <div class="card-feature-icon">💿</div>
+                    <h3>Your Anthem Anchors The Staging</h3>
+                    <p>Elevate your singular loop obsession with authentic vinyl groove textures and high-contrast typographic staging.</p>
+                    <div class="vinyl-showcase-box">
+                        <div class="vinyl-spinning-disc">
+                            <div class="vinyl-center-pip"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 5: Zero-Latency Client Engine -->
+                <div class="mosaic-card">
+                    <div class="card-meta-header">
+                        <span class="meta-tag-pill">SHAREABLE ARTIFACT</span>
+                        <span class="meta-spec-id">CORE-05</span>
+                    </div>
+                    <div class="card-feature-icon">⚡</div>
+                    <h3>Zero-Latency Client Core</h3>
+                    <p>Engineered to run 100% in your browser directly on hardware canvas. No cloud latency, zero waitlists, and complete privacy.</p>
+                    <div class="latency-status-badge">
+                        <span class="latency-live-dot"></span>
+                        <span class="latency-mono-txt">&lt; 1500ms Local Canvas Synthesis</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== HOW IT WORKS (NARRATIVE STORY TIMELINE) ===== -->
+        <section class="how-it-works-section" id="how-it-works">
+            <div class="section-heading-block">
+                <span class="section-kicker">HOW YOUR SOUND BECOMES YOU</span>
+                <h2 class="section-big-title">Four Steps to Your Sonic Identity</h2>
+                <p class="section-big-subtitle">A frictionless progression from personal listening habits to an iconic visual statement.</p>
+            </div>
+
+            <div class="timeline-story-track">
+                <div class="story-connecting-beam" aria-hidden="true"></div>
+
+                <div class="story-stage">
+                    <div class="stage-marker">01</div>
+                    <div class="stage-card">
+                        <span class="stage-symbol">🎙️</span>
+                        <h3>Your Sound</h3>
+                        <p>Name the 3 artists commanding your rotation and defining your aesthetic.</p>
+                        <span class="stage-tag">Phase 01 // Sound</span>
+                    </div>
+                </div>
+
+                <div class="story-stage">
+                    <div class="stage-marker">02</div>
+                    <div class="stage-card">
+                        <span class="stage-symbol">🎵</span>
+                        <h3>Your Track</h3>
+                        <p>Identify the singular song you currently have locked on repeat.</p>
+                        <span class="stage-tag">Phase 02 // Anthem</span>
+                    </div>
+                </div>
+
+                <div class="story-stage">
+                    <div class="stage-marker">03</div>
+                    <div class="stage-card">
+                        <span class="stage-symbol">🌙</span>
+                        <h3>Your Mood</h3>
+                        <p>Choose your emotional frequency from 8 curated sonic moods.</p>
+                        <span class="stage-tag">Phase 03 // Mood</span>
+                    </div>
+                </div>
+
+                <div class="story-stage">
+                    <div class="stage-marker highlight">04</div>
+                    <div class="stage-card highlight-card">
+                        <span class="stage-symbol">🎴</span>
+                        <h3>Your Identity</h3>
+                        <p>The harmonium engine synthesizes your high-resolution card with celebration confetti.</p>
+                        <span class="stage-tag">Phase 04 // Artifact</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FORM SECTION (INTERACTIVE RITUAL CONSOLE) ===== -->
+        <section class="ritual-form-section" id="formSection">
+            <div class="ritual-ambient-glow" id="formAtmosphereGlow"></div>
+
+            <div class="console-box">
+                <!-- Console Top Telemetry Header -->
+                <div class="console-top-telemetry">
+                    <div class="console-brand-flag">
+                        <span class="console-blinker"></span>
+                        <span class="console-lab-name">NEXASOUL IDENTITY CONSOLE</span>
+                    </div>
+                    <span class="console-stage-indicator" id="consoleStatus">PHASE 01 // WHO SHAPES YOUR SOUND?</span>
+                </div>
+
+                <!-- High-Tech Stepper Bar -->
+                <div class="stepper-bar-wrapper">
+                    <div class="stepper-line-bg">
+                        <div class="stepper-line-progress" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <div class="stepper-milestones">
+                        <div class="milestone-point active" data-step="1" id="node1">
+                            <div class="milestone-disc">01</div>
+                            <span class="milestone-text">Architects</span>
+                        </div>
+                        <div class="milestone-point" data-step="2" id="node2">
+                            <div class="milestone-disc">02</div>
+                            <span class="milestone-text">Anthem</span>
+                        </div>
+                        <div class="milestone-point" data-step="3" id="node3">
+                            <div class="milestone-disc">03</div>
+                            <span class="milestone-text">Aura</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 1: Who Shapes Your Sound? -->
+                <div class="console-phase active" id="step1" role="region" aria-labelledby="step1Title">
+                    <div class="phase-header-center">
+                        <span class="phase-kicker">PHASE 01 // ROTATION</span>
+                        <h2 id="step1Title">Who Shapes Your Sound?</h2>
+                        <p class="phase-explanation">Enter the top 3 artists commanding your headphones right now.</p>
+                    </div>
+
+                    <div class="inputs-stack">
+                        <div class="tactile-input-container">
+                            <span class="rank-number">01</span>
+                            <label for="artist1" class="visually-hidden">Primary Artist</label>
+                            <input type="text" id="artist1" placeholder="Primary artist (e.g. The Weeknd, Kendrick Lamar, Radiohead)" autocomplete="off" spellcheck="false" required>
+                        </div>
+                        <div class="tactile-input-container">
+                            <span class="rank-number">02</span>
+                            <label for="artist2" class="visually-hidden">Second Artist</label>
+                            <input type="text" id="artist2" placeholder="Second artist (e.g. Daft Punk, Lana Del Rey, Fred again..)" autocomplete="off" spellcheck="false" required>
+                        </div>
+                        <div class="tactile-input-container">
+                            <span class="rank-number">03</span>
+                            <label for="artist3" class="visually-hidden">Third Artist</label>
+                            <input type="text" id="artist3" placeholder="Third artist (e.g. Arctic Monkeys, Billie Eilish, Tame Impala)" autocomplete="off" spellcheck="false" required>
+                        </div>
+                    </div>
+
+                    <div class="phase-action-row">
+                        <button class="btn console-next-btn" onclick="nextStep(1)">
+                            <span>Continue to Anthem</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Phase 2: What's On Repeat? -->
+                <div class="console-phase" id="step2" role="region" aria-labelledby="step2Title">
+                    <div class="phase-header-center">
+                        <span class="phase-kicker">PHASE 02 // OBSESSION</span>
+                        <h2 id="step2Title">What's On Repeat?</h2>
+                        <p class="phase-explanation">The singular track dominating your headphones on endless loop.</p>
+                    </div>
+
+                    <div class="inputs-stack">
+                        <div class="tactile-input-container">
+                            <span class="rank-number">🎵</span>
+                            <label for="trackName" class="visually-hidden">Track Title</label>
+                            <input type="text" id="trackName" placeholder="Track title (e.g. Starboy, Midnight City, N95)" autocomplete="off" spellcheck="false" required>
+                        </div>
+                        <div class="tactile-input-container">
+                            <span class="rank-number">👤</span>
+                            <label for="trackArtist" class="visually-hidden">Track Artist</label>
+                            <input type="text" id="trackArtist" placeholder="Song artist (e.g. The Weeknd, M83, Kendrick Lamar)" autocomplete="off" spellcheck="false" required>
+                        </div>
+                    </div>
+
+                    <!-- Live Anthem Display -->
+                    <div class="anthem-live-feedback" id="liveTrackPreview">
+                        <div class="spinning-disc-icon"></div>
+                        <div class="anthem-meta-text">
+                            <span class="anthem-badge">NOW PLAYING TELEMETRY</span>
+                            <span class="anthem-title-txt" id="previewTitleDisplay">Your Track Name</span>
+                            <span class="anthem-artist-txt" id="previewArtistDisplay">Your Track Artist</span>
+                        </div>
+                    </div>
+
+                    <div class="phase-action-row dual">
+                        <button class="btn console-back-btn" onclick="prevStep(2)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+                            <span>Back</span>
+                        </button>
+                        <button class="btn console-next-btn" onclick="nextStep(2)">
+                            <span>Continue to Aura</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Phase 3: What's Your Sonic Energy? (The Mood Engine) -->
+                <div class="console-phase" id="step3" role="region" aria-labelledby="step3Title">
+                    <div class="phase-header-center">
+                        <span class="phase-kicker">PHASE 03 // ATMOSPHERE</span>
+                        <h2 id="step3Title">What's Your Sonic Energy?</h2>
+                        <p class="phase-explanation">Select the frequency that represents your current state of mind.</p>
+                    </div>
+
+                    <!-- Active Mood Aura Indicator -->
+                    <div class="active-aura-pill" id="activeMoodStatus">
+                        <span class="aura-glowing-pip"></span>
+                        <span class="aura-info">Active Sonic Aura: <strong id="currentSelectedMoodText">None selected</strong></span>
+                    </div>
+
+                    <!-- 8 High-Contrast Mood Cards -->
+                    <div class="mood-cards-container" id="moodGrid" role="radiogroup" aria-label="Select your sonic mood">
+                        <button type="button" class="mood-tile" data-mood="Gothic Grunge" onclick="selectMood(this)" role="radio" aria-checked="false">
+                            <span class="tile-glyph">🖤</span>
+                            <span class="tile-name">Gothic Grunge</span>
+                            <span class="tile-sub">Dark & Distorted</span>
+                        </button>
+                        <button type="button" class="mood-tile" data-mood="Cozy Lo-Fi" onclick="selectMood(this)" role="radio" aria-checked="false">
+                            <span class="tile-glyph">☕</span>
+                            <span class="tile-name">Cozy Lo-Fi</span>
+                            <span class="tile-sub">Tape Saturation</span>
+                        </button>
+                        <button type="button" class="mood-tile" data-mood="Electric Energy" onclick="selectMood(this)" role="radio" aria-checked="false">
+                            <span class="tile-glyph">⚡</span>
+                            <span class="tile-name">Electric Energy</span>
+                            <span class="tile-sub">High Voltage</span>
+                        </button>
+                        <button type="button" class="mood-tile" data-mood="Dreamy Synthwave" onclick="selectMood(this)" role="radio" aria-checked="false">
+                            <span class="tile-glyph">🌌</span>
+                            <span class="tile-name">Dreamy Synthwave</span>
+                            <span class="tile-sub">Neon Nostalgia</span>
+                        </button>
+                        <button type="button" class="mood-tile" data-mood="Chill R&B" onclick="selectMood(this)" role="radio" aria-checked="false">
+                            <span class="tile-glyph">💜</span>
+                            <span class="tile-name">Chill R&B</span>
+                            <span class="tile-sub">Velvet Midnight</span>
+                        </button>
+                        <button type="button" class="mood-tile" data-mood="Indie Folk" onclick="selectMood(this)" role="radio" aria-checked="false">
+                            <span class="tile-glyph">🍂</span>
+                            <span class="tile-name">Indie Folk</span>
+                            <span class="tile-sub">Campfire Acoustic</span>
+                        </button>
+                        <button type="button" class="mood-tile" data-mood="Hype Hip-Hop" onclick="selectMood(this)" role="radio" aria-checked="false">
+                            <span class="tile-glyph">🔥</span>
+                            <span class="tile-name">Hype Hip-Hop</span>
+                            <span class="tile-sub">808 Sub Heat</span>
+                        </button>
+                        <button type="button" class="mood-tile" data-mood="Peaceful Classical" onclick="selectMood(this)" role="radio" aria-checked="false">
+                            <span class="tile-glyph">🎻</span>
+                            <span class="tile-name">Peaceful Classical</span>
+                            <span class="tile-sub">Celestial Strings</span>
+                        </button>
+                    </div>
+
+                    <div class="phase-action-row dual">
+                        <button class="btn console-back-btn" onclick="prevStep(3)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+                            <span>Back</span>
+                        </button>
+                        <button class="btn console-generate-btn pulse-glow" id="generateBtn" onclick="generateCard()">
+                            <span class="gen-btn-inner">
+                                <span class="sparkle-symbol">⚡</span>
+                                <span>CREATE MY IDENTITY →</span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Phase 4: The Final Reveal (Identity Card Showcase) -->
+                <div class="console-phase-reveal" id="cardSection" role="region" aria-labelledby="cardRevealHeading">
+                    <div class="reveal-top-banner">
+                        <div class="reveal-tag-pill">
+                            <span class="check-glyph">✓</span>
+                            <span>IDENTITY SYNTHESIS COMPLETE</span>
+                        </div>
+                        <h2 id="cardRevealHeading">Your Visual Music Identity</h2>
+                        <p class="reveal-caption">Official NexaSoul Neural Artifact // Verified Sonic Fingerprint</p>
+                    </div>
+
+                    <!-- 3D Interactive Card Showcase -->
+                    <div class="card-display-chassis" id="cardWrapper">
+                        <div class="card-backdrop-halo" id="cardHalo"></div>
+                        <canvas id="musicCard" width="900" height="1300" aria-label="Official Music Identity Card"></canvas>
+                    </div>
+
+                    <!-- Actions Bar -->
+                    <div class="card-action-cluster">
+                        <button class="btn action-download-btn" id="downloadBtn" onclick="downloadCard()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            <span id="downloadBtnText">Download High-Res PNG</span>
+                        </button>
+                        <button class="btn action-share-btn" onclick="shareCard()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                            <span>Share Identity</span>
+                        </button>
+                        <button class="btn action-reset-btn" onclick="restartForm()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
+                            <span>Synthesize Another</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== 1.4s CINEMATIC SYNTHESIS MODAL ===== -->
+    <div class="generation-overlay" id="generationOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Synthesizing music identity card">
+        <div class="generation-modal-card">
+            <div class="modal-logo-area">
+                <img src="nexasoul-logo-alpha.png" alt="NexaSoul" class="modal-brand-logo" onerror="this.onerror=null;this.src='nexasoul-logo-core.jpg';">
+            </div>
+
+            <div class="triple-radar-core">
+                <div class="radar-orbital ring-1"></div>
+                <div class="radar-orbital ring-2"></div>
+                <div class="radar-orbital ring-3"></div>
+                <div class="radar-center-glyph">🎹</div>
+            </div>
+
+            <h3 class="modal-status-text" id="genStatusTitle">Harmonium Bellows Engaging...</h3>
+            <p class="modal-status-subtext" id="genStatusDesc">Pumping acoustic air pressure through neural frequency matrix.</p>
+
+            <div class="modal-progress-track">
+                <div class="modal-progress-fill" id="genProgressBar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER (LUXURY BRAND LOCKUP) ===== -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-main-row">
+                <div class="footer-brand-lockup">
+                    <img src="nexasoul-logo-alpha.png" alt="NexaSoul" class="footer-logo-asset" onerror="this.onerror=null;this.src='nexasoul-logo-core.jpg';">
+                    <div class="footer-text-meta">
+                        <span class="footer-brand-headline">NexaSoul Creative Lab</span>
+                        <span class="footer-brand-subheadline">Creative Engineering & AI Products · Chandigarh University</span>
+                    </div>
+                </div>
+
+                <div class="footer-anchor-links">
+                    <a href="#home">Experience</a>
+                    <a href="#features">Architecture</a>
+                    <a href="#how-it-works">Journey</a>
+                    <a href="#formSection" onclick="scrollToForm()">Launch Engine</a>
+                </div>
+            </div>
+
+            <div class="footer-hairline"></div>
+
+            <div class="footer-bottom-row">
+                <p class="footer-university-credit">
+                    Conceived & Engineered at <strong>Chandigarh University</strong> by <strong>NexaSoul</strong>
+                </p>
+                <div class="footer-status-cluster">
+                    <span class="status-live-indicator"><span class="status-live-dot"></span> Neural Engine Operational</span>
+                    <span class="footer-copyright">&copy; 2026 Moodify. All rights reserved.</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Application Script -->
+    <script src="script.js"></script>
+</body>
+</html>
